@@ -30,19 +30,18 @@
               <?php   
                   if (isset($_POST['login'])) {
                     $login = $_POST['login'];                  
-                    $senha = md5($_POST['senha']) ;
-
+                   
                     include "restrito/conexao.php";
-                    $sql = "SELECT * from `usuarios` WHERE login = '$login' AND senha = '$senha'";
-                    echo "<h6>$sql</h6>";
+                    //$sql = "SELECT * from `usuarios` WHERE login = '$login' AND senha = '$senha'";
+                      $sql = "SELECT * from `usuarios` WHERE login = '$login'";
+                      echo "<h6>$sql</h6>";
 
                     if ($result = mysqli_query($conn, $sql)) {
                       $num_registros = mysqli_num_rows($result);
                       if ($num_registros == 1) {
                         $linha = mysqli_fetch_assoc($result);
 
-
-                        if (($login == $linha['login']) and ($senha == $linha['senha'])) {
+                        if (($login == $linha['login']) and (password_verify($_POST['senha'], $linha['senha']))) {
                         session_start();
                         $_SESSION['login'] = "Robson";
                         header("location: restrito");
